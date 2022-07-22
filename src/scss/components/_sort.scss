@@ -21,6 +21,15 @@
     }
   }
 
+  &__icon{
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &.active {
+      transform: rotate(180deg);
+    }
+  }
+
   &__popup {
     position: absolute;
     right: 0;

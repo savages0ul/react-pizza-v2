@@ -1,13 +1,15 @@
 import React from 'react';
 
-function Sort() {
+const Sort = ({ setSortedCategories, sort, setSort }) => {
   const [open, setOpen] = React.useState(false);
   const [selected, setSelected] = React.useState(0);
   const list = ['популярности', 'цене', 'алфавиту'];
+  const listEn = ['rating', 'price', 'title'];
   const sortName = list[selected];
 
   const onClickListItem = (index) => {
     setSelected(index);
+    setSortedCategories(listEn[index]);
     setOpen(false);
   };
 
@@ -15,6 +17,8 @@ function Sort() {
     <div className="sort">
       <div className="sort__label">
         <svg
+          onClick={() => setSort(!sort)}
+          className={sort ? 'sort__icon' : 'sort__icon active'}
           width="10"
           height="6"
           viewBox="0 0 10 6"
@@ -46,6 +50,6 @@ function Sort() {
       )}
     </div>
   );
-}
+};
 
 export default Sort;
