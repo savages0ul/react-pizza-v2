@@ -8,20 +8,20 @@ import PizzaBlock from '../components/PizzaBlock';
 const Home = () => {
   const [items, setItems] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
-  const [filteredCategories, setFilteredCategories] = React.useState(0);
-  const [sortedCategories, setSortedCategories] = React.useState('rating');
-  const [sort, setSort] = React.useState(true);
+  const [categoryId, setCategoryId] = React.useState(0);
+  const [sortType, setSortType] = React.useState({
+    name: 'популярности',
+    sortProperty: 'rating',
+  });
 
   React.useEffect(() => {
+    setIsLoading(true);
+    const category = categoryId > 0 ? `category=${categoryId}` : '';
+    const sortBy = sortType.sortProperty.replace('-', '');
+    const order = sortType.sortProperty.includes('-') ? 'asc' : 'desc';
     return (
       fetch(
-        filteredCategories === 0
-          ? `https://62d44e105112e98e484db33a.mockapi.io/items?sortBy=${sortedCategories}&order=${
-              sort ? 'asc' : 'desc'
-            }`
-          : `https://62d44e105112e98e484db33a.mockapi.io/items?filter&category=${filteredCategories}&sortBy=${sortedCategories}&order=${
-              sort ? 'asc' : 'desc'
-            }`
+        `https://62d44e105112e98e484db33a.mockapi.io/items?${category}&sortBy=${sortBy}&order=${order}`
       )
         .then((response) => response.json())
         .then((data) => {
@@ -30,17 +30,16 @@ const Home = () => {
         }),
       window.scrollTo(0, 0)
     );
-  }, [filteredCategories, sortedCategories, sort]);
+  }, [categoryId, sortType]);
 
   return (
     <div className="container">
       <div className="content__top">
-        <Categories setFilteredCategories={setFilteredCategories} />
-        <Sort
-          setSortedCategories={setSortedCategories}
-          sort={sort}
-          setSort={setSort}
+        <Categories
+          value={categoryId}
+          onChangeCategory={(i) => setCategoryId(i)}
         />
+        <Sort value={sortType} onChangeSort={(obj) => setSortType(obj)} />
       </div>
       <h2 className="content__title">Все пиццы</h2>
       <div className="content__items">
